@@ -21,6 +21,7 @@ class ScanView extends StatefulWidget {
   ScanView({
     this.controller,
     this.onCapture,
+    this.onBrightlessChange,
     this.scanLineColor = Colors.green,
     this.scanAreaScale = 0.7,
   })  : assert(scanAreaScale <= 1.0, 'scanAreaScale must <= 1.0'),
@@ -28,6 +29,7 @@ class ScanView extends StatefulWidget {
 
   final ScanController? controller;
   final CaptureCallback? onCapture;
+  final BrightlessChange? onBrightlessChange;
   final Color scanLineColor;
   final double scanAreaScale;
 
@@ -76,9 +78,11 @@ class _ScanViewState extends State<ScanView> {
   void _onPlatformViewCreated(int id) {
     _channel = MethodChannel('chavesgu/scan/method_$id');
     _channel?.setMethodCallHandler((MethodCall call) async {
-      if (call.method == 'onCaptured') {
-        if (widget.onCapture != null)
-          widget.onCapture!(call.arguments.toString());
+      if (call.method == 'onCaptured' && widget.onCapture != null) {
+        widget.onCapture!(call.arguments.toString());
+      }
+      if (call.method == 'onBrightlessChange' && widget.onBrightlessChange != null) {
+        widget.onBrightlessChange!(call.arguments as double);
       }
     });
     widget.controller?._channel = _channel;
@@ -86,6 +90,8 @@ class _ScanViewState extends State<ScanView> {
 }
 
 typedef CaptureCallback(String data);
+
+typedef BrightlessChange(double data);
 
 class ScanArea {
   const ScanArea(this.width, this.height);
@@ -107,7 +113,7 @@ class ScanController {
     _channel?.invokeMethod("pause");
   }
 
-  void toggleTorchMode() {
-    _channel?.invokeMethod("toggleTorchMode");
+  void toggleTorchMode({bool? state}) {
+    _channel?.invokeMethod("toggleTorchMode", state);
   }
 }

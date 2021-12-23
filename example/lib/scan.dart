@@ -15,6 +15,11 @@ class ScanPage extends StatelessWidget {
               controller: controller,
               scanAreaScale: .7,
               scanLineColor: Colors.green,
+              onBrightlessChange: (data) {
+                if (data < 0) {
+                  controller.toggleTorchMode(state: true);
+                }
+              },
               onCapture: (data) {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (BuildContext context) {
@@ -34,25 +39,45 @@ class ScanPage extends StatelessWidget {
             ),
             Positioned(
               bottom: 0,
-              child: Row(
+              child: Column(
                 children: [
-                  ElevatedButton(
-                    child: Text("toggleTorchMode"),
-                    onPressed: () {
-                      controller.toggleTorchMode();
-                    },
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        child: Text("toggleTorchMode"),
+                        onPressed: () {
+                          controller.toggleTorchMode();
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("openTorchMode"),
+                        onPressed: () {
+                          controller.toggleTorchMode(state: true);
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("closeTorchMode"),
+                        onPressed: () {
+                          controller.toggleTorchMode(state: false);
+                        },
+                      ),
+                    ],
                   ),
-                  ElevatedButton(
-                    child: Text("pause"),
-                    onPressed: () {
-                      controller.pause();
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text("resume"),
-                    onPressed: () {
-                      controller.resume();
-                    },
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        child: Text("pause"),
+                        onPressed: () {
+                          controller.pause();
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("resume"),
+                        onPressed: () {
+                          controller.resume();
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

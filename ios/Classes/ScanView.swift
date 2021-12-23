@@ -305,20 +305,23 @@ public class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate,FlutterPlug
       if let exifMetadata = metadata[exifKey] as? [String: Any] {
         let brightlessKey = kCGImagePropertyExifBrightnessValue as String
         if let brightlessVal: Double = exifMetadata[brightlessKey] as? Double {
-          // TODO 输出亮度
-          print(brightlessVal);
+          self.channel!.invokeMethod("onBrightlessChange", arguments: brightlessVal);
         }
       }
     }
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    if call.method=="resume" {
-      self.resume();
-    } else if call.method=="pause" {
-      self.pause();
-    } else if call.method=="toggleTorchMode" {
-      self.toggleTorchMode();
+    switch call.method {
+    case "resume":
+      self.resume()
+    case "pause":
+      self.pause()
+    case "toggleTorchMode":
+      let state = call.arguments as! Bool?
+      self.toggleTorchMode(state: state)
+    default:
+      result(FlutterMethodNotImplemented)
     }
   }
   
@@ -334,22 +337,25 @@ public class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate,FlutterPlug
     }
   }
   
-  private func toggleTorchMode() {
+  private func toggleTorchMode(state: Bool?) {
     guard let device = AVCaptureDevice.default(for: .video) else { return }
     guard device.hasTorch else { return }
     do {
-      try device.lockForConfiguration();
-      
-      if (device.torchMode == AVCaptureDevice.TorchMode.on) {
-        device.torchMode = AVCaptureDevice.TorchMode.off;
-      } else {
-        do {
-          try device.setTorchModeOn(level: 1.0);
-        } catch {
-          print(error);
+      try device.lockForConfiguration()
+      switch device.torchMode {
+      case AVCaptureDevice.TorchMode.on:
+        if (!(state ?? false)) {
+          device.torchMode = AVCaptureDevice.TorchMode.off
+        }
+      default:
+        if (state ?? true) {
+          do {
+            try device.setTorchModeOn(level: 1.0);
+          } catch {
+            print(error)
+          }
         }
       }
-        
       device.unlockForConfiguration();
     } catch {
       print(error);
