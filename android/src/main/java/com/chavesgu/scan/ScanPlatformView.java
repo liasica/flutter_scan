@@ -67,7 +67,7 @@ public class ScanPlatformView implements PlatformView, MethodChannel.MethodCallH
         } else if (call.method.equals("pause")) {
             pause();
         } else if (call.method.equals("toggleTorchMode")) {
-            toggleTorchMode();
+            toggleTorchMode((Boolean)call.arguments);
         }
     }
 
@@ -79,9 +79,13 @@ public class ScanPlatformView implements PlatformView, MethodChannel.MethodCallH
         this.scanViewNew.pause();
         this.scanDrawView.pause();
     }
-    private void toggleTorchMode() {
-        this.scanViewNew.toggleTorchMode(!flashlight);
-        flashlight = !flashlight;
+    private void toggleTorchMode(@Nullable Boolean state) {
+        boolean to = !flashlight;
+        if (state != null) {
+            to = (boolean)state;
+        }
+        this.scanViewNew.toggleTorchMode(to);
+        flashlight = to;
     }
 
     @Override

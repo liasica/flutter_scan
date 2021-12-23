@@ -96,24 +96,26 @@ public class ScanViewNew extends BarcodeView implements PluginRegistry.RequestPe
             }
         });
         _resume();
-//        final ScanViewNew _this = this;
-//        this.getCameraInstance().requestPreview(new PreviewCallback() {
-//            @Override
-//            public void onPreview(SourceData sourceData) {
-//                Log.i("scan test", "preview sourceData"+sourceData);
-//                sourceData.setCropRect(getPreviewFramingRect());
-//                Bitmap bmp = sourceData.getBitmap();
-//                if (task != null && (task.getStatus() == AsyncTask.Status.RUNNING
-//                        || task.getStatus() == AsyncTask.Status.PENDING)) return;
-//                task = new QrCodeAsyncTask(_this);
-//                task.execute(bmp);
-//            }
-//
-//            @Override
-//            public void onPreviewError(Exception e) {
-//                Log.i("scan test", "preview error"+e.getLocalizedMessage());
-//            }
-//        });
+        
+    //     Log.i("scan test", "start, camera is open? " + this.getCameraInstance());
+    //     final ScanViewNew _this = this;
+    //     this.getCameraInstance().requestPreview(new PreviewCallback() {
+    //         @Override
+    //         public void onPreview(SourceData sourceData) {
+    //             Log.i("scan test", "preview sourceData "+sourceData);
+    //             sourceData.setCropRect(getPreviewFramingRect());
+    //             Bitmap bmp = sourceData.getBitmap();
+    //             if (task != null && (task.getStatus() == AsyncTask.Status.RUNNING
+    //                     || task.getStatus() == AsyncTask.Status.PENDING)) return;
+    //             task = new QrCodeAsyncTask(_this);
+    //             task.execute(bmp);
+    //         }
+
+    //         @Override
+    //         public void onPreviewError(Exception e) {
+    //             Log.i("scan test", "preview error"+e.getLocalizedMessage());
+    //         }
+    //    });
     }
 
     private void checkPermission() {
