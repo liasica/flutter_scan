@@ -55,6 +55,10 @@ Container(
   height: 250,
   child: ScanView(
     controller: controller,
+    onBrightnessChange: (val) {
+      // do something
+      print('brightness now is: $val');
+    },
 // custom scan area, if set to 1.0, will scan full area
     scanAreaScale: .7,
     scanLineColor: Colors.green.shade400,
@@ -77,6 +81,8 @@ String result = await Scan.parse(imagePath);
 - toggle flash light
 ```dart
 controller.toggleTorchMode();
+controller.toggleTorchMode(false);
+controller.toggleTorchMode(true);
 ```
 ### proguard-rules
 ```
