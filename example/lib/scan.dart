@@ -15,7 +15,7 @@ class ScanPage extends StatelessWidget {
               controller: controller,
               scanAreaScale: .7,
               scanLineColor: Colors.green,
-              onBrightlessChange: (data) {
+              onBrightnessChange: (data) {
                 if (data < 0) {
                   controller.toggleTorchMode(state: true);
                 }

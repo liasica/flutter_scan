@@ -21,7 +21,7 @@ class ScanView extends StatefulWidget {
   ScanView({
     this.controller,
     this.onCapture,
-    this.onBrightlessChange,
+    this.onBrightnessChange,
     this.scanLineColor = Colors.green,
     this.scanAreaScale = 0.7,
   })  : assert(scanAreaScale <= 1.0, 'scanAreaScale must <= 1.0'),
@@ -29,7 +29,7 @@ class ScanView extends StatefulWidget {
 
   final ScanController? controller;
   final CaptureCallback? onCapture;
-  final BrightlessChange? onBrightlessChange;
+  final BrightlessChange? onBrightnessChange;
   final Color scanLineColor;
   final double scanAreaScale;
 
@@ -81,8 +81,8 @@ class _ScanViewState extends State<ScanView> {
       if (call.method == 'onCaptured' && widget.onCapture != null) {
         widget.onCapture!(call.arguments.toString());
       }
-      if (call.method == 'onBrightlessChange' && widget.onBrightlessChange != null) {
-        widget.onBrightlessChange!(call.arguments as double);
+      if (call.method == 'onBrightnessChange' && widget.onBrightnessChange != null) {
+        widget.onBrightnessChange!(call.arguments as double);
       }
     });
     widget.controller?._channel = _channel;

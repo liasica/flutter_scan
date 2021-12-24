@@ -1,31 +1,26 @@
 package com.chavesgu.scan;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
-import android.util.Log;
 import android.view.View;
-
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.platform.PlatformView;
 
 public class ScanPlatformView implements PlatformView, MethodChannel.MethodCallHandler, ScanViewNew.CaptureListener {
-    private MethodChannel channel;
-    private Context context;
-    private Activity activity;
-    private ActivityPluginBinding activityPluginBinding;
+    private final MethodChannel channel;
+    private final Context context;
+    private final Activity activity;
+    private final ActivityPluginBinding activityPluginBinding;
     private ParentView parentView;
-//    private ScanView scanView;
     private ScanViewNew scanViewNew;
     private ScanDrawView scanDrawView;
     private boolean flashlight;
@@ -62,12 +57,16 @@ public class ScanPlatformView implements PlatformView, MethodChannel.MethodCallH
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        if (call.method.equals("resume")) {
-            resume();
-        } else if (call.method.equals("pause")) {
-            pause();
-        } else if (call.method.equals("toggleTorchMode")) {
-            toggleTorchMode((Boolean)call.arguments);
+        switch (call.method) {
+            case "resume":
+                resume();
+                break;
+            case "pause":
+                pause();
+                break;
+            case "toggleTorchMode":
+                toggleTorchMode((Boolean) call.arguments);
+                break;
         }
     }
 
@@ -82,7 +81,7 @@ public class ScanPlatformView implements PlatformView, MethodChannel.MethodCallH
     private void toggleTorchMode(@Nullable Boolean state) {
         boolean to = !flashlight;
         if (state != null) {
-            to = (boolean)state;
+            to = state;
         }
         this.scanViewNew.toggleTorchMode(to);
         flashlight = to;
@@ -92,5 +91,10 @@ public class ScanPlatformView implements PlatformView, MethodChannel.MethodCallH
     public void onCapture(String text) {
         channel.invokeMethod("onCaptured", text);
         pause();
+    }
+
+    @Override
+    public void onBrightnessChange(Double val) {
+        channel.invokeMethod("onBrightnessChange", val);
     }
 }

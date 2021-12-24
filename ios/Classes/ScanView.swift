@@ -305,7 +305,7 @@ public class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate,FlutterPlug
       if let exifMetadata = metadata[exifKey] as? [String: Any] {
         let brightKey = kCGImagePropertyExifBrightnessValue as String
         if let brightlessVal: Double = exifMetadata[brightKey] as? Double {
-          self.channel!.invokeMethod("onBrightlessChange", arguments: brightlessVal);
+          self.channel!.invokeMethod("onBrightnessChange", arguments: brightlessVal);
         }
       }
     }
