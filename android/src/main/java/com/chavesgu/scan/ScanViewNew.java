@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -16,6 +17,9 @@ import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Toast;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import android.media.ExifInterface;
 
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.qrcode.QRCodeReader;
@@ -95,9 +99,9 @@ public class ScanViewNew extends BarcodeView implements PluginRegistry.RequestPe
                 }
             }
         });
-        _resume();
         
-    //     Log.i("scan test", "start, camera is open? " + this.getCameraInstance());
+        _resume();
+        Log.i("scan test", "start, camera is open? " + this.getCameraInstance().isOpen());
     //     final ScanViewNew _this = this;
     //     this.getCameraInstance().requestPreview(new PreviewCallback() {
     //         @Override
@@ -198,8 +202,17 @@ public class ScanViewNew extends BarcodeView implements PluginRegistry.RequestPe
 
         @Override
         protected String doInBackground(Bitmap... params) {
+            Bitmap bitmap = params[0];
+            // 获取亮度
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(); 
+            bitmap.compress(CompressFormat.PNG, 0, bos); 
+            byte[] bitmapdata = bos.toByteArray();
+            ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
+            // ExifInterface exif = new ExifInterface(bs);
+            // Log.i("scan test", "ExifInterface: " + exif.getAttribute("BrightnessValue"));
+            Log.i("scan test", "ExifInterface: " + bs);
             // 解析二维码/条码
-            return QRCodeDecoder.decodeQRCode(mWeakReference.get().context, params[0]);
+            return QRCodeDecoder.decodeQRCode(mWeakReference.get().context, bitmap);
         }
 
         @Override

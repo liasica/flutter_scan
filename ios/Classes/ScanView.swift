@@ -303,8 +303,8 @@ public class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate,FlutterPlug
     if let metadata = CMCopyDictionaryOfAttachments(allocator: nil, target: sampleBuffer, attachmentMode: kCMAttachmentMode_ShouldPropagate) as? [String: Any] {
       let exifKey = kCGImagePropertyExifDictionary as String
       if let exifMetadata = metadata[exifKey] as? [String: Any] {
-        let brightlessKey = kCGImagePropertyExifBrightnessValue as String
-        if let brightlessVal: Double = exifMetadata[brightlessKey] as? Double {
+        let brightKey = kCGImagePropertyExifBrightnessValue as String
+        if let brightlessVal: Double = exifMetadata[brightKey] as? Double {
           self.channel!.invokeMethod("onBrightlessChange", arguments: brightlessVal);
         }
       }
