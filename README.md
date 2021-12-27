@@ -84,6 +84,16 @@ controller.toggleTorchMode();
 controller.toggleTorchMode(false);
 controller.toggleTorchMode(true);
 ```
+- Ambient light detection
+> If brightness return less than 0, you may need to open flashlight `controller.toggleTorchMode(true)`
+
+```dart
+onBrightnessChange: (val) {
+  // print(val);
+}
+```
+
+
 ### proguard-rules
 ```
 -ignorewarnings
